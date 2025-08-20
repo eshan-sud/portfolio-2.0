@@ -1,12 +1,13 @@
-// project/src/app/home/page.jsx
+// project/src/app/page.js
 
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { supabase } from "@/lib/supabaseClient";
+import MaintenancePage from "@/components/MaintenancePage";
 
 const HomePage = () => {
   const [resumeUrl, setResumeUrl] = useState(null);
@@ -94,4 +95,10 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default function App() {
+  const isMaintenanceMode = process.env.NEXT_PUBLIC_MAINTENANCE_MODE === "true";
+  if (isMaintenanceMode) {
+    return <MaintenancePage />;
+  }
+  return <HomePage />;
+}
