@@ -1,4 +1,4 @@
-## Portfoio 2.0
+## Portfolio 2.0
 
 An enhanced-dynamic & responsive portfolio website, designed to effectively showcase my skills, projects, & resume to potential employers & peers, enhancing visibility & professional branding.
 
