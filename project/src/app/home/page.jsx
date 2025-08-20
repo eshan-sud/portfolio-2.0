@@ -2,35 +2,15 @@
 
 "use client";
 
-import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
-import { supabase } from "@/lib/supabaseClient";
+import { useData } from "@/lib/DataContext";
 
 const HomePage = () => {
-  const [resumeUrl, setResumeUrl] = useState(null);
+  const { resumeUrl } = useData();
   const primaryText = "Eshan Sud.";
   const subtitleText = "Software Engineer";
-
-  useEffect(() => {
-    const fetchResume = async () => {
-      const { data, error } = await supabase
-        .from("resume")
-        .select("url")
-        .order("createdAt", { ascending: false })
-        .limit(1)
-        .single();
-
-      if (error || !data) {
-        setResumeUrl("/documents/resume_eshan_sud.pdf");
-      } else {
-        setResumeUrl(data.url);
-      }
-    };
-
-    fetchResume();
-  }, []);
 
   const sentenceVariants = {
     hidden: { opacity: 1 },

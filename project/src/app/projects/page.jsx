@@ -2,7 +2,7 @@
 
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { CldImage } from "next-cloudinary";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
@@ -14,7 +14,7 @@ import {
   ChevronUp,
   X,
 } from "lucide-react";
-import { supabase } from "@/lib/supabaseClient";
+import { useData } from "@/lib/DataContext";
 import Image from "next/image";
 import { cardVariants } from "@/utility/animation";
 
@@ -162,31 +162,10 @@ const ProjectModal = ({ project, onClose }) => {
 };
 
 function ProjectsPage() {
-  const [projects, setProjects] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const { projects } = useData();
   const [searchTerm, setSearchTerm] = useState("");
   const [showAll, setShowAll] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
-
-  useEffect(() => {
-    const fetchProjects = async () => {
-      const { data, error } = await supabase
-        .from("projects")
-        .select("*")
-        .order("displayOrder", { ascending: false });
-
-      if (error) {
-        console.error("Error fetching projects:", error);
-        setError("Could not fetch projects. Please try again later.");
-      } else {
-        setProjects(data);
-      }
-      setLoading(false);
-    };
-
-    fetchProjects();
-  }, []);
 
   const filteredProjects = projects.filter((project) => {
     const searchContent =
@@ -225,54 +204,42 @@ function ProjectsPage() {
             size={20}
           />
         </div>
-        {loading && (
-          <p className="text-center text-gray-500">Loading projects...</p>
+        <motion.div
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+          variants={{ visible: { transition: { staggerChildren: 0.1 } } }}
+          initial="hidden"
+          animate="visible"
+        >
+          {projectsToShow.map((project, index) => (
+            <ProjectCard
+              key={project.id}
+              project={project}
+              onClick={() => setSelectedProject(project)}
+              isPriority={index < 3}
+            />
+          ))}
+        </motion.div>
+        {filteredProjects.length > 3 && (
+          <div className="w-full flex justify-center mt-12">
+            <AnimatePresence mode="wait">
+              <motion.button
+                key={showAll ? "close" : "show"}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.3 }}
+                onClick={() => setShowAll(!showAll)}
+                className="group w-14 h-14 flex items-center justify-center bg-gray-800/50 text-yellow-400 rounded-full border border-gray-700/50 hover:bg-yellow-400 hover:text-black transition-all duration-300"
+              >
+                {showAll ? <ChevronUp size={24} /> : <ChevronDown size={24} />}
+              </motion.button>
+            </AnimatePresence>
+          </div>
         )}
-        {error && <p className="text-center text-red-500">{error}</p>}
-        {!loading && !error && (
-          <>
-            <motion.div
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-              variants={{ visible: { transition: { staggerChildren: 0.1 } } }}
-              initial="hidden"
-              animate="visible"
-            >
-              {projectsToShow.map((project, index) => (
-                <ProjectCard
-                  key={project.id}
-                  project={project}
-                  onClick={() => setSelectedProject(project)}
-                  isPriority={index < 3}
-                />
-              ))}
-            </motion.div>
-            {filteredProjects.length > 3 && (
-              <div className="w-full flex justify-center mt-12">
-                <AnimatePresence mode="wait">
-                  <motion.button
-                    key={showAll ? "close" : "show"}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    transition={{ duration: 0.3 }}
-                    onClick={() => setShowAll(!showAll)}
-                    className="group w-14 h-14 flex items-center justify-center bg-gray-800/50 text-yellow-400 rounded-full border border-gray-700/50 hover:bg-yellow-400 hover:text-black transition-all duration-300"
-                  >
-                    {showAll ? (
-                      <ChevronUp size={24} />
-                    ) : (
-                      <ChevronDown size={24} />
-                    )}
-                  </motion.button>
-                </AnimatePresence>
-              </div>
-            )}
-            {filteredProjects.length === 0 && (
-              <p className="text-center text-gray-500 mt-8">
-                No projects found matching your search.
-              </p>
-            )}
-          </>
+        {filteredProjects.length === 0 && (
+          <p className="text-center text-gray-500 mt-8">
+            No projects found matching your search.
+          </p>
         )}
       </div>
       <AnimatePresence>

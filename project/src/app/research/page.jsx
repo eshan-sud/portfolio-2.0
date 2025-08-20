@@ -2,11 +2,10 @@
 
 "use client";
 
-import { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { FileText, BookOpen, Lightbulb } from "lucide-react";
-import { supabase } from "@/lib/supabaseClient";
+import { useData } from "@/lib/DataContext";
 import { formatDate, titleCase } from "@/utility/helper";
 import { containerVariants, itemVariants } from "@/utility/animation";
 import OrcidIcon from "@/components/OrcidIcon";
@@ -60,38 +59,7 @@ const ResearchCard = ({ title, subtitle, date, authors, link, status }) => {
 };
 
 const ResearchPage = () => {
-  const [patents, setPatents] = useState([]);
-  const [publications, setPublications] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [orcidUrl, setOrcidUrl] = useState(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const [patentsRes, publicationsRes, orcidRes] = await Promise.all([
-        supabase
-          .from("patents")
-          .select("*")
-          .order("filingDate", { ascending: false }),
-        supabase
-          .from("publications")
-          .select("*")
-          .order("year", { ascending: false }),
-        supabase
-          .from("orcid")
-          .select("url")
-          .order("createdAt", { ascending: false })
-          .limit(1)
-          .single(),
-      ]);
-
-      if (patentsRes.data) setPatents(patentsRes.data);
-      if (publicationsRes.data) setPublications(publicationsRes.data);
-      if (orcidRes.data) setOrcidUrl(orcidRes.data.url);
-
-      setLoading(false);
-    };
-    fetchData();
-  }, []);
+  const { patents, publications, orcidUrl } = useData();
 
   return (
     <div className="pt-24 pb-16 px-4 sm:px-8 md:px-16 lg:px-24">
@@ -108,74 +76,70 @@ const ResearchPage = () => {
           A collection of my academic publications & intellectual property
           contributions, exploring the frontiers of technology.
         </p>
-        {loading ? (
-          <p className="text-gray-400">Loading research...</p>
-        ) : (
-          <div>
-            {publications.length > 0 && (
-              <div className="mb-16">
-                <h2 className="text-3xl md:text-4xl font-bold text-white mb-8 flex items-center gap-3">
-                  <BookOpen /> Publications
-                </h2>
-                {orcidUrl && (
-                  <Link
-                    href={orcidUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group relative inline-flex items-center gap-2 text-gray-400 hover:text-white font-semibold text-sm md:text-base transition-colors mb-8"
-                  >
-                    <OrcidIcon size={16} />
-                    <span>View my ORCiD Profile</span>
-                    <span className="absolute left-0 -bottom-1 w-full h-[1px] bg-yellow-400 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></span>
-                  </Link>
-                )}
-                <motion.div
-                  variants={containerVariants}
-                  initial="hidden"
-                  animate="visible"
-                  className="grid grid-cols-1 md:grid-cols-2 gap-6"
+        <div>
+          {publications.length > 0 && (
+            <div className="mb-16">
+              <h2 className="text-3xl md:text-4xl font-bold text-white mb-8 flex items-center gap-3">
+                <BookOpen /> Publications
+              </h2>
+              {orcidUrl && (
+                <Link
+                  href={orcidUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group relative inline-flex items-center gap-2 text-gray-400 hover:text-white font-semibold text-sm md:text-base transition-colors mb-8"
                 >
-                  {publications.map((pub) => (
-                    <ResearchCard
-                      key={pub.id}
-                      title={pub.title}
-                      subtitle={pub.journal}
-                      date={pub.year}
-                      authors={`Authors: ${pub.authors.join(", ")}`}
-                      link={pub.pdfUrl}
-                      status={pub.status}
-                    />
-                  ))}
-                </motion.div>
-              </div>
-            )}
-            {patents.length > 0 && (
-              <div>
-                <h2 className="text-3xl md:text-4xl font-bold text-white mb-8 flex items-center gap-3">
-                  <Lightbulb /> Intellectual Property
-                </h2>
-                <motion.div
-                  variants={containerVariants}
-                  initial="hidden"
-                  animate="visible"
-                  className="grid grid-cols-1 md:grid-cols-2 gap-6"
-                >
-                  {patents.map((patent) => (
-                    <ResearchCard
-                      key={patent.id}
-                      title={patent.title}
-                      subtitle={patent.patentNumber}
-                      date={`Filed on ${formatDate(patent.filingDate)}`}
-                      authors={`Inventors: ${patent.inventors.join(", ")}`}
-                      link={patent.documentUrl}
-                      status={patent.status}
-                    />
-                  ))}
-                </motion.div>
-              </div>
-            )}
-          </div>
-        )}
+                  <OrcidIcon size={16} />
+                  <span>View my ORCiD Profile</span>
+                  <span className="absolute left-0 -bottom-1 w-full h-[1px] bg-yellow-400 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></span>
+                </Link>
+              )}
+              <motion.div
+                variants={containerVariants}
+                initial="hidden"
+                animate="visible"
+                className="grid grid-cols-1 md:grid-cols-2 gap-6"
+              >
+                {publications.map((pub) => (
+                  <ResearchCard
+                    key={pub.id}
+                    title={pub.title}
+                    subtitle={pub.journal}
+                    date={pub.year}
+                    authors={`Authors: ${pub.authors.join(", ")}`}
+                    link={pub.pdfUrl}
+                    status={pub.status}
+                  />
+                ))}
+              </motion.div>
+            </div>
+          )}
+          {patents.length > 0 && (
+            <div>
+              <h2 className="text-3xl md:text-4xl font-bold text-white mb-8 flex items-center gap-3">
+                <Lightbulb /> Intellectual Property
+              </h2>
+              <motion.div
+                variants={containerVariants}
+                initial="hidden"
+                animate="visible"
+                className="grid grid-cols-1 md:grid-cols-2 gap-6"
+              >
+                {patents.map((patent) => (
+                  <ResearchCard
+                    key={patent.id}
+                    title={patent.title}
+                    subtitle={patent.patentNumber}
+                    date={`Filed on ${formatDate(patent.filingDate)}`}
+                    authors={`Inventors: ${patent.inventors.join(", ")}`}
+                    link={patent.documentUrl}
+                    status={patent.status}
+                  />
+                ))}
+              </motion.div>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

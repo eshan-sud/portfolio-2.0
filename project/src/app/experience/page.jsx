@@ -7,23 +7,15 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { FileText, Send } from "lucide-react";
+import { useData } from "@/lib/DataContext";
 import { supabase } from "@/lib/supabaseClient";
 import { formatDate } from "@/utility/helper";
 import { containerVariants, itemVariants } from "@/utility/animation";
 
-const ExperienceCard = ({
-  title,
-  company,
-  startDate,
-  endDate,
-  current,
-  description,
-  skills,
-  certificateUrl,
-  offerLetterUrl,
-  logoUrl,
-  websiteUrl,
-}) => {
+const ExperienceCard = ({}) => {
+  const { experiences } = useData();
+  const internships = experiences.filter((exp) => exp.type === "internship");
+  const jobs = experiences.filter((exp) => exp.type === "full-time");
   const dateRange = `${formatDate(startDate)} - ${
     current ? "Present" : formatDate(endDate)
   }`;

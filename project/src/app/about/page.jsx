@@ -21,6 +21,7 @@ import {
   ChevronDown,
   Search,
 } from "lucide-react";
+import { useData } from "@/lib/DataContext";
 import { supabase } from "@/lib/supabaseClient";
 import { iconMap, formatDate } from "@/utility/helper";
 import { containerVariants, itemVariants } from "@/utility/animation";
@@ -329,14 +330,7 @@ const AboutPage = () => {
   const [experiences, setExperiences] = useState([]);
   const [patents, setPatents] = useState([]);
   const [publications, setPublications] = useState([]);
-  const [profilePicUrl, setProfilePicUrl] = useState(
-    "https://placehold.co/400x400/1a2b4c/ffffff?text=ES"
-  );
-  const [education, setEducation] = useState([]);
-  const [awards, setAwards] = useState([]);
-  const [techStack, setTechStack] = useState([]);
-  const [socials, setSocials] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { profilePicUrl, education, awards, techStack, socials } = useData();
 
   useEffect(() => {
     const fetchData = async () => {
