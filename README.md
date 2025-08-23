@@ -2,6 +2,8 @@
 
 An enhanced-dynamic & responsive portfolio website, designed to effectively showcase my skills, projects, & resume to potential employers & peers, enhancing visibility & professional branding.
 
+![Eshan Sud's Portfolio](https://res.cloudinary.com/dpjhwcj4q/image/upload/v1755773898/portfolio2.0_myyptt.png)
+
 Deployed link: <a href="https://eshan-sud.vercel.app/" target="_blank"> here </a>
 
 Tech stack:
