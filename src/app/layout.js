@@ -23,13 +23,74 @@ export const metadata = {
   title: "Eshan Sud's Portfolio",
   description: "Portfolio Website of Eshan Sud",
   keywords:
-    "portofilio, developer, eshan, sud, manipal, university, jaipur, software, software engineer, hire, patents, projects, internships, work experience, academics, awards, portfolio, website",
+    "portfolio, website, portfolio website developer, eshan, sud, eshan sud, manipal, university, jaipur, manipal university jaipur, software, engineer, software engineer, hire, research, publications, patents, open, source, open source, projects, internships, full time, job, work experience, academics, awards",
   author: "Eshan Sud",
   language: "english",
-  // og:title, og:description, og:image, og:url, og:type
-  // twitter:card, twitter:site, twitter:creator, twitter:title, twitter:description, twitter:image
-  // robots: "nofollow",
-  // themeColor: "",
+  robots: "nofollow",
+  verification: {
+    google: "85BaJwZ9KQ-787R4jgzXFVXRcNd0KzuzNJpjb5cHqOE",
+  },
+  appleWebApp: {
+    title: "Eshan Sud's Portfolio",
+  },
+  // Open Graph (og) tags for social media sharing
+  openGraph: {
+    title: {
+      default: "Eshan Sud's Portfolio",
+      template: "%s - Eshan Sud's Portfolio",
+    },
+    description:
+      "Portfolio website showcasing Eshan Sud's projects, research, and professional experience.",
+    url: "https://eshan-sud.vercel.app/",
+    siteName: "Eshan Sud",
+    images: [
+      {
+        url: "https://res.cloudinary.com/dpjhwcj4q/image/upload/v1755773898/portfolio2.0_myyptt.png",
+        width: 1200,
+        height: 630,
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  // Linkedin card tags
+  linkedInOpenGraph: {
+    title: "Eshan Sud | Software Engineer",
+    description:
+      "Explore Eshan Sud's LinkedIn profile showcasing skills, experience, and accomplishments in software engineering.",
+    url: "https://www.linkedin.com/in/eshan-sud/",
+    images: [
+      {
+        url: "https://res.cloudinary.com/dpjhwcj4q/image/upload/v1755773898/portfolio2.0_myyptt.png",
+        width: 1200,
+        height: 630,
+      },
+    ],
+  },
+  // GitHub card tags
+  gitHubOpenGraph: {
+    title: "Eshan Sud | GitHub",
+    description:
+      "Visit Eshan Sud's GitHub profile for a collection of open-source projects and contributions.",
+    url: "https://github.com/eshan-sud",
+    images: [
+      {
+        url: "https://res.cloudinary.com/dpjhwcj4q/image/upload/v1755773898/portfolio2.0_myyptt.png",
+        width: 1200,
+        height: 630,
+      },
+    ],
+  },
+  // Twitter card tags
+  twitter: {
+    card: "summary_large_image",
+    title: "Eshan Sud's Portfolio",
+    description:
+      "A showcase of my projects, research, and professional experience.",
+    images: [
+      "https://res.cloudinary.com/dpjhwcj4q/image/upload/v1755773898/portfolio2.0_myyptt.png",
+    ],
+  },
 };
 
 export default function RootLayout({ children }) {

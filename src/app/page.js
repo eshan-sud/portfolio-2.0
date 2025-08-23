@@ -2,36 +2,16 @@
 
 "use client";
 
-import { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
-import { supabase } from "@/lib/supabaseClient";
+import { ArrowRight, Download } from "lucide-react";
+import { useData } from "@/lib/DataContext";
 import MaintenancePage from "@/components/MaintenancePage";
 
 const HomePage = () => {
-  const [resumeUrl, setResumeUrl] = useState(null);
+  const { resumeUrl } = useData();
   const primaryText = "Eshan Sud.";
   const subtitleText = "Software Engineer";
-
-  useEffect(() => {
-    const fetchResume = async () => {
-      const { data, error } = await supabase
-        .from("resume")
-        .select("url")
-        .order("createdAt", { ascending: false })
-        .limit(1)
-        .single();
-
-      if (error || !data) {
-        setResumeUrl("/documents/resume_eshan_sud.pdf");
-      } else {
-        setResumeUrl(data.url);
-      }
-    };
-
-    fetchResume();
-  }, []);
 
   const sentenceVariants = {
     hidden: { opacity: 1 },
@@ -48,6 +28,13 @@ const HomePage = () => {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0 },
   };
+
+  // const handleDownload = () => {
+  //   const link = document.createElement("a");
+  //   link.href = resumeUrl;
+  //   link.download = "resume_eshan_sud.pdf";
+  //   link.click();
+  // };
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden px-4">
@@ -77,17 +64,24 @@ const HomePage = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 1.2 }}
-            className="mt-4"
+            // className="mt-4"
+            className="mt-12 flex items-center gap-4"
           >
             <Link
               href={resumeUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="group inline-flex items-center gap-2 px-6 py-3 bg-gray-800/50 text-yellow-400 rounded-full font-semibold border border-gray-700/50 hover:bg-yellow-400 hover:text-black transition-all duration-300"
+              className="group inline-flex items-center gap-2 px-4 py-3 bg-gray-800/50 text-yellow-400 rounded-full font-semibold border border-gray-700/50 hover:bg-yellow-400 hover:text-black transition-all duration-300"
             >
               <span>View My Resume</span>
               <ArrowRight className="transition-transform duration-300 group-hover:translate-x-1" />
             </Link>
+            {/* <button
+              onClick={handleDownload}
+              className="group inline-flex items-center justify-center p-3 w-12 h-12 bg-gray-800/50 text-yellow-400 rounded-full font-semibold border border-gray-700/50 hover:bg-yellow-400 hover:text-black transition-all duration-300"
+            >
+              <Download className="h-8 w-8 group-hover:scale-110 transition-all duration-300" />
+            </button> */}
           </motion.div>
         )}
       </div>

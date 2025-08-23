@@ -2,7 +2,7 @@
 
 "use client";
 
-import { useTheme } from "next-themes";
+// import { useTheme } from "next-themes";
 import { motion, AnimatePresence } from "framer-motion";
 
 import { useData } from "@/lib/DataContext";
@@ -12,12 +12,12 @@ import Footer from "@/components/Footer";
 import Loader from "@/components/Loader";
 
 export default function ClientLayout({ children }) {
-  const { theme, setTheme } = useTheme();
+  // const { theme, setTheme } = useTheme();
   const { isLoading } = useData();
 
-  const handleThemeChange = () => {
-    setTheme(theme === "dark" ? "light" : "dark");
-  };
+  // const handleThemeChange = () => {
+  //   setTheme(theme === "dark" ? "light" : "dark");
+  // };
 
   return (
     <div className="relative">

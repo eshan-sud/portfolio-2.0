@@ -27,7 +27,6 @@
 *.pem
 public/queries.sql
 file-structure.txt
-TODO
 
 # debug
 npm-debug.log*

@@ -2,7 +2,7 @@
 
 An enhanced-dynamic & responsive portfolio website, designed to effectively showcase my skills, projects, & resume to potential employers & peers, enhancing visibility & professional branding.
 
-Deployed link: <a href="new_link" target="_blank"> here </a>
+Deployed link: <a href="https://eshan-sud.vercel.app/" target="_blank"> here </a>
 
 Tech stack:
 
@@ -24,6 +24,7 @@ npm run dev
 
 ### Future Additions:
 
+- [x] Combine all supabase queries into a single request for efficiency
 - [] Dark Mode
 - [] Smooth scrolling
 - [] Lazy loading with error boundaries
@@ -31,3 +32,7 @@ npm run dev
 - [] Touch-friendly interactive elements on mobile
 - [] RAG-based ChatBot
 - [] Auto-detect language & show text accordingly
+- [] Use Prima/Redis for cache
+- [] Check rate limiter
+- [] Add the cite this functionality to publications generating citations in various formats (APA, Hardward, IEEE, etc)
+- [] Decrease the usage of Client components & increase Server components

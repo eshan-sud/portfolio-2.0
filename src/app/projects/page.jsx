@@ -2,7 +2,7 @@
 
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { CldImage } from "next-cloudinary";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
@@ -14,7 +14,7 @@ import {
   ChevronUp,
   X,
 } from "lucide-react";
-import { supabase } from "@/lib/supabaseClient";
+import { useData } from "@/lib/DataContext";
 import Image from "next/image";
 import { cardVariants } from "@/utility/animation";
 
@@ -87,6 +87,10 @@ const ProjectModal = ({ project, onClose }) => {
       ></motion.div>
       <motion.div
         layoutId={`card-${project.id}`}
+        initial={{ opacity: 0.5, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0.5, scale: 0.95 }}
+        transition={{ duration: 0.3, ease: "easeOut" }}
         className="relative z-10 w-full max-w-3xl max-h-[90vh] bg-[#16224c] rounded-lg overflow-hidden border border-gray-700/50 flex flex-col"
       >
         <div className="relative w-full h-64 md:h-80 flex-shrink-0 [mask-image:linear-gradient(to_top,transparent,black_35%,black)]">
@@ -161,32 +165,11 @@ const ProjectModal = ({ project, onClose }) => {
   );
 };
 
-function ProjectsPage() {
-  const [projects, setProjects] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+const ProjectsPage = () => {
+  const { isLoading, projects, error } = useData();
   const [searchTerm, setSearchTerm] = useState("");
   const [showAll, setShowAll] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
-
-  useEffect(() => {
-    const fetchProjects = async () => {
-      const { data, error } = await supabase
-        .from("projects")
-        .select("*")
-        .order("displayOrder", { ascending: false });
-
-      if (error) {
-        console.error("Error fetching projects:", error);
-        setError("Could not fetch projects. Please try again later.");
-      } else {
-        setProjects(data);
-      }
-      setLoading(false);
-    };
-
-    fetchProjects();
-  }, []);
 
   const filteredProjects = projects.filter((project) => {
     const searchContent =
@@ -225,11 +208,11 @@ function ProjectsPage() {
             size={20}
           />
         </div>
-        {loading && (
+        {isLoading && (
           <p className="text-center text-gray-500">Loading projects...</p>
         )}
         {error && <p className="text-center text-red-500">{error}</p>}
-        {!loading && !error && (
+        {!isLoading && !error && (
           <>
             <motion.div
               className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
@@ -285,6 +268,6 @@ function ProjectsPage() {
       </AnimatePresence>
     </div>
   );
-}
+};
 
 export default ProjectsPage;

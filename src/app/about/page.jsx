@@ -21,7 +21,7 @@ import {
   ChevronDown,
   Search,
 } from "lucide-react";
-import { supabase } from "@/lib/supabaseClient";
+import { useData } from "@/lib/DataContext";
 import { iconMap, formatDate } from "@/utility/helper";
 import { containerVariants, itemVariants } from "@/utility/animation";
 
@@ -325,65 +325,20 @@ const TechStackSection = ({ techStack }) => {
 };
 
 const AboutPage = () => {
-  const [projects, setProjects] = useState([]);
-  const [experiences, setExperiences] = useState([]);
-  const [patents, setPatents] = useState([]);
-  const [publications, setPublications] = useState([]);
-  const [profilePicUrl, setProfilePicUrl] = useState(
-    "https://placehold.co/400x400/1a2b4c/ffffff?text=ES"
-  );
-  const [education, setEducation] = useState([]);
-  const [awards, setAwards] = useState([]);
-  const [techStack, setTechStack] = useState([]);
-  const [socials, setSocials] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const [
-        eduRes,
-        awardsRes,
-        techRes,
-        picRes,
-        socialsRes,
-        projectsRes,
-        experiencesRes,
-        patentsRes,
-        publicationsRes,
-      ] = await Promise.all([
-        supabase
-          .from("education")
-          .select("*")
-          .order("startDate", { ascending: false }),
-        supabase.from("awards").select("*").order("date", { ascending: false }),
-        supabase.from("tech_stack").select("*"),
-        supabase
-          .from("profile_picture")
-          .select("url")
-          .order("createdAt", { ascending: false })
-          .limit(1)
-          .single(),
-        supabase.from("socials").select("name, url").order("displayOrder"),
-        supabase.from("projects").select("id"),
-        supabase.from("experiences").select("id"),
-        supabase.from("patents").select("id"),
-        supabase.from("publications").select("id"),
-      ]);
-
-      if (eduRes.data) setEducation(eduRes.data);
-      if (awardsRes.data) setAwards(awardsRes.data);
-      if (techRes.data) setTechStack(techRes.data);
-      if (picRes.data?.url) setProfilePicUrl(picRes.data.url);
-      if (socialsRes.data) setSocials(socialsRes.data);
-      if (projectsRes.data) setProjects(projectsRes.data);
-      if (experiencesRes.data) setExperiences(experiencesRes.data);
-      if (patentsRes.data) setPatents(patentsRes.data);
-      if (publicationsRes.data) setPublications(publicationsRes.data);
-
-      setLoading(false);
-    };
-    fetchData();
-  }, []);
+  const {
+    isLoading,
+    profilePicUrl,
+    description,
+    socials,
+    education,
+    awards,
+    techStack,
+    projects,
+    experiences,
+    patents,
+    publications,
+    error,
+  } = useData();
 
   const projectCount = projects.length || 0;
   const experienceCount = experiences.length || 0;
@@ -425,9 +380,7 @@ const AboutPage = () => {
             className="text-center md:text-left"
           >
             <p className="text-base sm:text-lg md:text-xl mb-10 leading-relaxed text-justify">
-              I am a Software Engineer with a knack for building elegant &
-              efficient solutions. My journey in tech is driven by a deep
-              curiosity & a desire to solve real-world problems.
+              {description}
             </p>
             <div className="flex items-center justify-center md:justify-start gap-4 md:gap-6">
               {socials.map((social) => {
@@ -439,7 +392,8 @@ const AboutPage = () => {
             </div>
           </motion.div>
         </div>
-        {!loading && (
+        {error && <p className="text-center text-red-500">{error}</p>}
+        {!isLoading && !error && (
           <StatsStrip
             projectCount={projectCount}
             experienceCount={experienceCount}
@@ -454,17 +408,19 @@ const AboutPage = () => {
         >
           <span className="text-gray-500">Technologies</span> I Use.
         </motion.h1>
-        {loading ? (
-          <p className="text-center text-gray-500">Loading tech stack...</p>
-        ) : (
-          <TechStackSection techStack={techStack} />
-        )}
+        {error && <p className="text-center text-red-500">{error}</p>}
+        {!error &&
+          (isLoading ? (
+            <p className="text-center text-gray-500">Loading tech stack...</p>
+          ) : (
+            <TechStackSection techStack={techStack} />
+          ))}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 mt-24">
           <div>
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-12 flex items-center gap-3">
               <GraduationCap /> Education
             </h2>
-            {loading ? (
+            {isLoading ? (
               <p className="text-gray-500">Loading...</p>
             ) : education && education.length > 0 ? (
               <motion.div
@@ -479,7 +435,8 @@ const AboutPage = () => {
               </motion.div>
             ) : (
               <p className="text-gray-500 pl-2">
-                Education history is currently unavailable.
+                Education history is currently unavailable. Please try again
+                later.
               </p>
             )}
           </div>
@@ -487,7 +444,7 @@ const AboutPage = () => {
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-12 flex items-center gap-3">
               <Award /> Awards
             </h2>
-            {loading ? (
+            {isLoading ? (
               <p className="text-gray-500">Loading...</p>
             ) : awards && awards.length > 0 ? (
               <motion.div
@@ -502,7 +459,8 @@ const AboutPage = () => {
               </motion.div>
             ) : (
               <p className="text-gray-500 pl-2">
-                Awards information is currently unavailable.
+                Awards information is currently unavailable. Please try again
+                later.
               </p>
             )}
           </div>

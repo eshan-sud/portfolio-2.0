@@ -14,6 +14,8 @@ export const DataProvider = ({ children }) => {
   const [data, setData] = useState({
     profilePicUrl: "https://placehold.co/400x400/1a2b4c/ffffff?text=ES",
     resumeUrl: "/documents/resume_eshan_sud.pdf",
+    orcidUrl: "https://orcid.org/my-orcid?orcid=0009-0002-5030-0186",
+    description: "",
     projects: [],
     experiences: [],
     education: [],
@@ -58,12 +60,13 @@ export const DataProvider = ({ children }) => {
           supabase
             .from("publications")
             .select("*")
-            .order("publicationDate", { ascending: false }),
+            .order("year", { ascending: false })
+            .order("month", { ascending: false }),
           supabase
             .from("awards")
             .select("*")
             .order("date", { ascending: false }),
-          supabase.from("tech_stack").select("*").order("displayOrder"),
+          supabase.from("tech_stack").select("*").order("createdAt"),
           supabase
             .from("resume")
             .select("url")
@@ -72,14 +75,15 @@ export const DataProvider = ({ children }) => {
             .single(),
           supabase
             .from("profile_picture")
-            .select("url")
+            .select("url, description")
             .order("createdAt", { ascending: false })
             .limit(1)
             .single(),
           supabase.from("socials").select("name, url").order("displayOrder"),
         ]);
 
-        setData({
+        setData((prevState) => ({
+          ...prevState,
           projects: projectsRes.data || [],
           experiences: experiencesRes.data || [],
           education: educationRes.data || [],
@@ -92,9 +96,13 @@ export const DataProvider = ({ children }) => {
           profilePicUrl:
             profilePicRes.data?.url ||
             "https://placehold.co/400x400/1a2b4c/ffffff?text=ES",
-        });
+          description:
+            profilePicRes.data?.description ||
+            "Description not available. Please try again later.",
+        }));
       } catch (error) {
         console.error("Failed to fetch initial data:", error);
+        setData((prevState) => ({ ...prevState, error: error }));
       } finally {
         setIsLoading(false);
       }

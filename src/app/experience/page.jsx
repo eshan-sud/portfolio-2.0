@@ -7,7 +7,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { FileText, Send } from "lucide-react";
-import { supabase } from "@/lib/supabaseClient";
+import { useData } from "@/lib/DataContext";
 import { formatDate } from "@/utility/helper";
 import { containerVariants, itemVariants } from "@/utility/animation";
 
@@ -116,30 +116,16 @@ const ExperienceCard = ({
 };
 
 const ExperiencePage = () => {
+  const { isLoading, experiences, error } = useData();
   const [internships, setInternships] = useState([]);
   const [jobs, setJobs] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchExperience = async () => {
-      const { data, error } = await supabase
-        .from("experiences")
-        .select("*")
-        .order("startDate", { ascending: false });
-
-      if (error) {
-        console.error("Supabase error:", error);
-        setError("Failed to fetch experience data.");
-      } else if (data) {
-        setInternships(data.filter((exp) => exp.type === "internship"));
-        setJobs(data.filter((exp) => exp.type === "full-time"));
-      }
-      setLoading(false);
-    };
-
-    fetchExperience();
-  }, []);
+    if (!isLoading) {
+      setInternships(experiences.filter((exp) => exp.type === "internship"));
+      setJobs(experiences.filter((exp) => exp.type === "full-time"));
+    }
+  }, [isLoading, experiences]);
 
   const isCurrentlyEmployed =
     jobs.some((job) => job.current) ||
@@ -161,11 +147,10 @@ const ExperiencePage = () => {
             roles where I've had the opportunity to learn and contribute.
           </p>
         </motion.div>
-        {loading && <p className="text-gray-400">Loading experience...</p>}
-        {error && <p className="text-red-400">{error}</p>}
-        {!loading && !error && (
+        {isLoading && <p className="text-gray-400">Loading experience...</p>}
+        {error && <p className="text-center text-red-500">{error}</p>}
+        {!isLoading && !error && (
           <>
-            {/* "Available for Hire" Button */}
             {!isCurrentlyEmployed && (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -216,9 +201,8 @@ const ExperiencePage = () => {
             )}
 
             {internships.length === 0 && jobs.length === 0 && (
-              <p className="text-gray-500">
-                No experience found. This might be due to Row Level Security
-                (RLS) in Supabase.
+              <p className="text-gray-500 pl-2">
+                Experience history is currently unavailable.
               </p>
             )}
           </>

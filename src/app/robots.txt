@@ -1,12 +1,8 @@
-# Allow Googlebot full access to crawl the entire site.
 User-agent: Googlebot
 Allow: /
 
-# Disallow all other web crawlers & bots from the honeypot.
 User-agent: *
 Disallow: /bot-trap/
 Disallow: /
 
-# Location of the sitemap.
-# Replace with your actual domain name.
-Sitemap: https://www.yourdomain.com/sitemap.xml
+Sitemap: https://eshan-sud.vercel.app/sitemap.xml
