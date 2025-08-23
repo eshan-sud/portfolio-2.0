@@ -3,6 +3,5 @@ Allow: /
 
 User-agent: *
 Disallow: /bot-trap/
-Disallow: /
 
 Sitemap: https://eshan-sud.vercel.app/sitemap.xml

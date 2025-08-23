@@ -1,7 +1,7 @@
 // project/src/app/sitemap.js
 
 export default function sitemap() {
-  const baseUrl = "https://eshan-sud.vercel.app/";
+  const baseUrl = "https://eshan-sud.vercel.app";
 
   return [
     {
