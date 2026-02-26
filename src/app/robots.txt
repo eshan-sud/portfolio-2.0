@@ -1,0 +1,46 @@
+User-agent: *
+Allow: /
+Disallow: /bot-trap/
+Disallow: /api/
+Disallow: /test-rate-limit/
+
+User-agent: Googlebot
+Allow: /
+Disallow: /bot-trap/
+
+User-agent: Bingbot
+Allow: /
+Disallow: /bot-trap/
+
+# Allow AI crawlers so the portfolio can be discovered via AI search products
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+# Disallow aggressive scrapers
+User-agent: CCBot
+Disallow: /
+
+User-agent: Bytespider
+Disallow: /
+
+Crawl-delay: 1
+
+Sitemap: https://eshan-sud.vercel.app/sitemap.xml
