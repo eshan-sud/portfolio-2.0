@@ -12,7 +12,7 @@ import {
   type ReactNode,
 } from "react";
 import { supabase } from "@/lib/supabaseClient";
-import { fetchLocalData } from "@/lib/localDataLoader";
+// import { fetchLocalData } from "@/lib/localDataLoader";
 import { FALLBACK_PROFILE, getCloudinaryUrl } from "@/lib/constants";
 
 // Cache configuration
@@ -104,7 +104,7 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
           scheduleExpiry(remaining, fetchAllData);
           return;
         }
-        const startTime = performance.now();
+        // const startTime = performance.now();
         let projectsRes,
           experiencesRes,
           educationRes,
@@ -114,17 +114,7 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
           techStackRes,
           userDataRes;
 
-        if (USE_LOCAL_DATA) {
-          const localData = await fetchLocalData();
-          projectsRes = localData.projects;
-          experiencesRes = localData.experiences;
-          educationRes = localData.education;
-          patentsRes = localData.patents;
-          publicationsRes = localData.publications;
-          awardsRes = localData.awards;
-          techStackRes = localData.techStack;
-          userDataRes = localData.userData?.data ?? null;
-        } else {
+        if (!USE_LOCAL_DATA) {
           try {
             const { data: rpcData, error: rpcError } = await supabase.rpc(
               "get_all_portfolio_data",
@@ -184,6 +174,17 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
             ]);
           }
         }
+        // else {
+        //   const localData = await fetchLocalData();
+        //   projectsRes = localData.projects;
+        //   experiencesRes = localData.experiences;
+        //   educationRes = localData.education;
+        //   patentsRes = localData.patents;
+        //   publicationsRes = localData.publications;
+        //   awardsRes = localData.awards;
+        //   techStackRes = localData.techStack;
+        //   userDataRes = localData.userData?.data ?? null;
+        //   }
         // Fallback to hardcoded socials
         const dbSocials = [
           {
@@ -271,7 +272,7 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
     return () => {
       if (expireTimerRef.current) clearTimeout(expireTimerRef.current);
     };
-  }, []);
+  }, [scheduleExpiry]);
 
   return (
     <DataContext.Provider value={{ isLoading, ...data }}>

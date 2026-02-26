@@ -51,12 +51,15 @@ For detailed documentation, see [scripts/database/README.md](scripts/database/RE
 
 ### Future Additions:
 
+- [ ] FIX: GitHubActivityGraph hover functionality
+- [ ] FIX: Cite this blur effect
+- [ ] FIX: Project sample pictures
 - [ ] Add accessibility
   - [ ] Language switcher
+  - [ ] Auto-detect language
   - [ ] Reduced motion support — respect prefers-reduced-motion in GSAP/Framer Motion
   - [ ] High contrast mode — toggle stored in localStorage
 - [ ] Add more features or functionalities
-  - [ ] Accent selection from a centralised source
   - [ ] Cursor trail effect — you have CustomCursor.jsx, extend it with a particle trail
   - [ ] "Contact form" using nodemailer api
   - [ ] "View counter"
@@ -64,8 +67,6 @@ For detailed documentation, see [scripts/database/README.md](scripts/database/RE
   - [ ] Admin dashboard - protected /admin route (NextAuth) to edit DB entries without SQL
   - [ ] Blog/Articles section - MDX-based or DB-backed, with tags, search, RSS feed
   - [ ] Email newsletter - "Subscribe for updates" using Resend audiences
-
-- [ ] Auto-detect language & show text accordingly
 - [ ] Touch-friendly interactive elements on mobile
 - [ ] RAG-based ChatBot
 - [ ] Use Prima/Redis for cache
