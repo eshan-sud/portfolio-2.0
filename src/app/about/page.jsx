@@ -146,7 +146,9 @@ const EducationCard = ({
   >
     <div className="absolute left-[22px] top-12 bottom-0 w-0.5 bg-gray-700"></div>
     <div className="flex-shrink-0">
-      <div className={`relative w-12 h-12 bg-gray-800 rounded-full border-4 border-[#0D1A3C] flex items-center justify-center transition-colors duration-300 ${accent.groupHoverBorder}`}>
+      <div
+        className={`relative w-12 h-12 bg-gray-800 rounded-full border-4 border-[#0D1A3C] flex items-center justify-center transition-colors duration-300 ${accent.groupHoverBorder}`}
+      >
         {logoUrl ? (
           <Image
             src={logoUrl}
@@ -171,7 +173,9 @@ const EducationCard = ({
               className={`relative ${accent.hoverText} transition-colors group/link`}
             >
               <span>{institution}</span>
-              <span className={`absolute left-0 -bottom-0.5 w-full h-[1px] ${accent.bg} transform scale-x-0 group-hover/link:scale-x-100 transition-transform duration-300`}></span>
+              <span
+                className={`absolute left-0 -bottom-0.5 w-full h-[1px] ${accent.bg} transform scale-x-0 group-hover/link:scale-x-100 transition-transform duration-300`}
+              ></span>
             </Link>
           ) : (
             <span>{institution}</span>
@@ -192,7 +196,9 @@ const EducationCard = ({
 
 const AwardCard = ({ title, issuer, date, certificateUrl }) => (
   <motion.div variants={itemVariants} className="pl-10 relative group">
-    <div className={`absolute left-0 top-1 w-4 h-4 bg-gray-700 rounded-full border-4 border-[#0D1A3C] transition-colors duration-300 ${accent.groupHoverBg}`}></div>
+    <div
+      className={`absolute left-0 top-1 w-4 h-4 bg-gray-700 rounded-full border-4 border-[#0D1A3C] transition-colors duration-300 ${accent.groupHoverBg}`}
+    ></div>
     <div className="mb-12">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-1">
         <h3 className="text-lg md:text-xl font-bold text-white">{title}</h3>
@@ -424,7 +430,7 @@ const AboutPage = () => {
                   priority
                 />
                 {/* Open to work green dot badge */}
-                {!openToWork && (
+                {openToWork && (
                   <div className="absolute bottom-2 right-2 md:bottom-3 md:right-3">
                     <span className="relative flex h-5 w-5">
                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
