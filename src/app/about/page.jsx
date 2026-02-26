@@ -20,10 +20,22 @@ import {
   Award,
   ChevronDown,
   Search,
+  User,
+  Code2,
+  Mail,
+  Check,
 } from "lucide-react";
 import { useData } from "@/lib/DataContext";
 import { iconMap, formatDate } from "@/utility/helper";
 import { containerVariants, itemVariants } from "@/utility/animation";
+import { accent } from "@/lib/accent";
+import {
+  EducationCardSkeleton,
+  ProfileSkeleton,
+  ErrorBoundary,
+  GitHubActivityGraph,
+} from "@/components";
+import { getCdnIconUrl } from "@/lib/constants";
 
 const SocialLink = ({ href, icon: Icon }) => (
   <Link
@@ -38,6 +50,40 @@ const SocialLink = ({ href, icon: Icon }) => (
     />
   </Link>
 );
+
+const CopyEmailButton = ({ email }) => {
+  const [copied, setCopied] = useState(false);
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(email);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {}
+  };
+  return (
+    <button
+      onClick={handleCopy}
+      aria-label={copied ? "Email copied!" : "Copy email address"}
+      className="group relative w-12 h-12 bg-gray-800 rounded-full flex items-center justify-center transition-all duration-300 hover:bg-white"
+    >
+      {copied ? (
+        <Check
+          size={24}
+          className="text-green-400 transition-all duration-300"
+        />
+      ) : (
+        <Mail
+          size={24}
+          className="text-gray-400 transition-all duration-300 group-hover:text-gray-900"
+        />
+      )}
+      {/* Tooltip */}
+      <span className="pointer-events-none absolute -top-9 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-gray-900 px-2 py-1 text-xs text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity duration-200 border border-gray-700">
+        {copied ? "Copied!" : "Copy email"}
+      </span>
+    </button>
+  );
+};
 
 const AnimatedCounter = ({ value }) => {
   const count = useMotionValue(0);
@@ -100,7 +146,7 @@ const EducationCard = ({
   >
     <div className="absolute left-[22px] top-12 bottom-0 w-0.5 bg-gray-700"></div>
     <div className="flex-shrink-0">
-      <div className="relative w-12 h-12 bg-gray-800 rounded-full border-4 border-[#0D1A3C] flex items-center justify-center transition-colors duration-300 group-hover:border-yellow-400">
+      <div className={`relative w-12 h-12 bg-gray-800 rounded-full border-4 border-[#0D1A3C] flex items-center justify-center transition-colors duration-300 ${accent.groupHoverBorder}`}>
         {logoUrl ? (
           <Image
             src={logoUrl}
@@ -122,10 +168,10 @@ const EducationCard = ({
               href={websiteUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="relative hover:text-yellow-400 transition-colors group/link"
+              className={`relative ${accent.hoverText} transition-colors group/link`}
             >
               <span>{institution}</span>
-              <span className="absolute left-0 -bottom-0.5 w-full h-[1px] bg-yellow-400 transform scale-x-0 group-hover/link:scale-x-100 transition-transform duration-300"></span>
+              <span className={`absolute left-0 -bottom-0.5 w-full h-[1px] ${accent.bg} transform scale-x-0 group-hover/link:scale-x-100 transition-transform duration-300`}></span>
             </Link>
           ) : (
             <span>{institution}</span>
@@ -146,7 +192,7 @@ const EducationCard = ({
 
 const AwardCard = ({ title, issuer, date, certificateUrl }) => (
   <motion.div variants={itemVariants} className="pl-10 relative group">
-    <div className="absolute left-0 top-1 w-4 h-4 bg-gray-700 rounded-full border-4 border-[#0D1A3C] transition-colors duration-300 group-hover:bg-yellow-400"></div>
+    <div className={`absolute left-0 top-1 w-4 h-4 bg-gray-700 rounded-full border-4 border-[#0D1A3C] transition-colors duration-300 ${accent.groupHoverBg}`}></div>
     <div className="mb-12">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-1">
         <h3 className="text-lg md:text-xl font-bold text-white">{title}</h3>
@@ -160,7 +206,7 @@ const AwardCard = ({ title, issuer, date, certificateUrl }) => (
           href={certificateUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 text-sm text-yellow-400 hover:text-yellow-300 transition-colors"
+          className={`inline-flex items-center gap-2 text-sm ${accent.text} ${accent.textHover} transition-colors`}
         >
           <FileText size={16} />
           <span>View Certificate</span>
@@ -186,7 +232,7 @@ const TechStackSection = ({ techStack }) => {
   });
 
   const filteredTechStack = techStack.filter((tech) =>
-    tech.name.toLowerCase().includes(searchTerm.toLowerCase())
+    tech.name.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   return (
@@ -206,7 +252,8 @@ const TechStackSection = ({ techStack }) => {
             >
               {tech.iconUrl && (
                 <Image
-                  src={tech.iconUrl}
+                  // src={tech.iconUrl}
+                  src={getCdnIconUrl(tech.iconUrl) || tech.iconUrl}
                   alt={`${tech.name} icon`}
                   width={28}
                   height={28}
@@ -223,7 +270,7 @@ const TechStackSection = ({ techStack }) => {
         <div className="w-full flex justify-center mt-8">
           <motion.button
             onClick={() => setShowGrid(true)}
-            className="group w-14 h-14 flex items-center justify-center bg-gray-800/50 text-yellow-400 rounded-full border border-gray-700/50 hover:bg-yellow-400 hover:text-black transition-all duration-300"
+            className={`group w-14 h-14 flex items-center justify-center bg-gray-800/50 ${accent.text} rounded-full border border-gray-700/50 ${accent.hoverBg} hover:text-black transition-all duration-300`}
           >
             <ChevronDown size={24} />
           </motion.button>
@@ -244,7 +291,7 @@ const TechStackSection = ({ techStack }) => {
                 placeholder="Search skills..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full bg-gray-800/50 text-white placeholder-gray-500 rounded-full py-3 pl-12 pr-4 border border-gray-700/50 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                className={`w-full bg-gray-800/50 text-white placeholder-gray-500 rounded-full py-3 pl-12 pr-4 border border-gray-700/50 focus:outline-none focus:ring-2 ${accent.ring}`}
               />
               <Search
                 className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500"
@@ -272,7 +319,7 @@ const TechStackSection = ({ techStack }) => {
                     >
                       {tech.iconUrl && (
                         <Image
-                          src={tech.iconUrl}
+                          src={getCdnIconUrl(tech.iconUrl) || tech.iconUrl}
                           alt={`${tech.name} icon`}
                           width={32}
                           height={32}
@@ -293,7 +340,7 @@ const TechStackSection = ({ techStack }) => {
                   >
                     {tech.iconUrl && (
                       <Image
-                        src={tech.iconUrl}
+                        src={getCdnIconUrl(tech.iconUrl) || tech.iconUrl}
                         alt={`${tech.name} icon`}
                         width={32}
                         height={32}
@@ -305,13 +352,13 @@ const TechStackSection = ({ techStack }) => {
                       {tech.name}
                     </p>
                   </motion.div>
-                )
+                ),
               )}
             </motion.div>
             <div className="w-full flex justify-center mt-8">
               <motion.button
                 onClick={() => setShowGrid(false)}
-                className="group w-14 h-14 flex items-center justify-center bg-gray-800/50 text-yellow-400 rounded-full border border-gray-700/50 hover:bg-yellow-400 hover:text-black transition-all duration-300"
+                className={`group w-14 h-14 flex items-center justify-center bg-gray-800/50 ${accent.text} rounded-full border border-gray-700/50 ${accent.hoverBg} hover:text-black transition-all duration-300`}
                 animate={{ rotate: 180 }}
               >
                 <ChevronDown size={24} />
@@ -337,136 +384,184 @@ const AboutPage = () => {
     experiences,
     patents,
     publications,
+    openToWork,
     error,
   } = useData();
-
+  if (error) throw new Error(error);
   const projectCount = projects.length || 0;
   const experienceCount = experiences.length || 0;
   const researchCount = patents.length + publications.length || 0;
-
   return (
-    <div className="pt-24 pb-16 px-4 sm:px-8 md:px-16 lg:px-24">
-      <div className="max-w-6xl mx-auto transform xl:scale-110 2xl:scale-125 transition-transform duration-500 ease-in-out">
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4"
-        >
-          <span className="text-gray-500">A Little Bit</span> About Me.
-        </motion.h1>
-        <div className="grid grid-cols-1 md:grid-cols-2 mx-12 mt-16 md:mx-0 gap-12 items-center mb-24">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="flex justify-center"
-          >
-            <div className="w-48 h-48 md:w-56 md:h-56 lg:w-64 lg:h-64 relative">
-              <Image
-                src={profilePicUrl}
-                alt="A picture of Eshan Sud"
-                fill
-                className="object-cover rounded-full shadow-lg"
-                unoptimized
-                priority={1}
-              />
-            </div>
-          </motion.div>
-          <motion.div
+    <ErrorBoundary fallbackMessage="Unable to load profile data. Please refresh the page.">
+      <div className="pt-24 pb-16 px-4 sm:px-8 md:px-16 lg:px-24">
+        <div className="max-w-6xl mx-auto origin-top transform xl:scale-110 2xl:scale-125 transition-transform duration-500 ease-in-out">
+          <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-            className="text-center md:text-left"
+            transition={{ duration: 0.5 }}
+            className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 flex items-center gap-3"
           >
-            <p className="text-base sm:text-lg md:text-xl mb-10 leading-relaxed text-justify">
-              {description}
-            </p>
-            <div className="flex items-center justify-center md:justify-start gap-4 md:gap-6">
-              {socials.map((social) => {
-                const Icon = iconMap[social.name];
-                return Icon ? (
-                  <SocialLink key={social.name} href={social.url} icon={Icon} />
-                ) : null;
-              })}
+            <User size={36} className="text-white" />
+            <span>
+              <span className="text-gray-500">A Little Bit</span> About Me.
+            </span>
+          </motion.h1>
+          <div className="grid grid-cols-1 md:grid-cols-2 mx-12 mt-16 md:mx-0 gap-12 items-center mb-24">
+            {/* Profile Picture*/}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="flex justify-center"
+            >
+              <div className="w-48 h-48 md:w-56 md:h-56 lg:w-64 lg:h-64 relative">
+                <Image
+                  src={profilePicUrl}
+                  alt="A picture of Eshan Sud"
+                  fill
+                  className="object-cover rounded-full shadow-lg"
+                  unoptimized
+                  priority
+                />
+                {/* Open to work green dot badge */}
+                {!openToWork && (
+                  <div className="absolute bottom-2 right-2 md:bottom-3 md:right-3">
+                    <span className="relative flex h-5 w-5">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-5 w-5 bg-green-500 border-2 border-[#0D1A3C]"></span>
+                    </span>
+                  </div>
+                )}
+              </div>
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+              className="text-center md:text-left"
+            >
+              {/* Description */}
+              <p className="text-base sm:text-lg md:text-xl mb-10 leading-relaxed text-justify">
+                {description}
+              </p>
+              {/* Socials */}
+              <div className="flex items-center justify-center md:justify-start gap-4 md:gap-6 flex-wrap">
+                {socials.map((social) => {
+                  const Icon = iconMap[social.name];
+                  return Icon ? (
+                    <SocialLink
+                      key={social.name}
+                      href={social.url}
+                      icon={Icon}
+                    />
+                  ) : null;
+                })}
+                <CopyEmailButton email="eshansud22@gmail.com" />
+              </div>
+            </motion.div>
+          </div>
+          {/* Stats Strip */}
+          {!isLoading && (
+            <StatsStrip
+              projectCount={projectCount}
+              experienceCount={experienceCount}
+              researchCount={researchCount}
+            />
+          )}
+          {/* GitHub Activity Graph */}
+          <GitHubActivityGraph />
+          {/* Tech Stacks Used */}
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-16 flex items-center gap-3"
+          >
+            <Code2 size={36} className="text-white" />
+            <span>
+              <span className="text-gray-500">Technologies</span> I Use.
+            </span>
+          </motion.h1>
+          {isLoading ? (
+            <div className="animate-pulse space-y-4">
+              <div className="h-12 bg-gray-700/50 rounded w-full"></div>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {Array.from({ length: 8 }).map((_, i) => (
+                  <div key={i} className="h-20 bg-gray-700/50 rounded"></div>
+                ))}
+              </div>
             </div>
-          </motion.div>
-        </div>
-        {error && <p className="text-center text-red-500">{error}</p>}
-        {!isLoading && !error && (
-          <StatsStrip
-            projectCount={projectCount}
-            experienceCount={experienceCount}
-            researchCount={researchCount}
-          />
-        )}
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-16"
-        >
-          <span className="text-gray-500">Technologies</span> I Use.
-        </motion.h1>
-        {error && <p className="text-center text-red-500">{error}</p>}
-        {!error &&
-          (isLoading ? (
-            <p className="text-center text-gray-500">Loading tech stack...</p>
           ) : (
             <TechStackSection techStack={techStack} />
-          ))}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 mt-24">
-          <div>
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-12 flex items-center gap-3">
-              <GraduationCap /> Education
-            </h2>
-            {isLoading ? (
-              <p className="text-gray-500">Loading...</p>
-            ) : education && education.length > 0 ? (
-              <motion.div
-                variants={containerVariants}
-                initial="hidden"
-                animate="visible"
-                className="relative"
-              >
-                {education.map((edu) => (
-                  <EducationCard key={edu.id} {...edu} />
-                ))}
-              </motion.div>
-            ) : (
-              <p className="text-gray-500 pl-2">
-                Education history is currently unavailable. Please try again
-                later.
-              </p>
-            )}
-          </div>
-          <div>
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-12 flex items-center gap-3">
-              <Award /> Awards
-            </h2>
-            {isLoading ? (
-              <p className="text-gray-500">Loading...</p>
-            ) : awards && awards.length > 0 ? (
-              <motion.div
-                variants={containerVariants}
-                initial="hidden"
-                animate="visible"
-                className="relative border-l-2 border-gray-700 pl-6"
-              >
-                {awards.map((award) => (
-                  <AwardCard key={award.id} {...award} />
-                ))}
-              </motion.div>
-            ) : (
-              <p className="text-gray-500 pl-2">
-                Awards information is currently unavailable. Please try again
-                later.
-              </p>
-            )}
+          )}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 mt-24">
+            {/* Education Section */}
+            <div>
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-12 flex items-center gap-3">
+                <GraduationCap /> Education
+              </h2>
+              {isLoading ? (
+                <div>
+                  {Array.from({ length: 3 }).map((_, i) => (
+                    <EducationCardSkeleton key={i} />
+                  ))}
+                </div>
+              ) : education && education.length > 0 ? (
+                <motion.div
+                  variants={containerVariants}
+                  initial="hidden"
+                  animate="visible"
+                  className="relative"
+                >
+                  {education.map((edu) => (
+                    <EducationCard key={edu.id} {...edu} />
+                  ))}
+                </motion.div>
+              ) : (
+                <p className="text-gray-500 pl-2">
+                  Education history is currently unavailable. Please try again
+                  later.
+                </p>
+              )}
+            </div>
+            {/* Awards Section */}
+            <div>
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-12 flex items-center gap-3">
+                <Award /> Awards
+              </h2>
+              {isLoading ? (
+                <div>
+                  {Array.from({ length: 3 }).map((_, i) => (
+                    <div key={i} className="pl-10 relative mb-12 animate-pulse">
+                      <div className="absolute left-0 top-1 w-4 h-4 bg-gray-700 rounded-full border-4 border-[#0D1A3C]"></div>
+                      <div className="h-6 bg-gray-700/50 rounded w-3/4 mb-2"></div>
+                      <div className="h-4 bg-gray-700/50 rounded w-1/2 mb-2"></div>
+                      <div className="h-4 bg-gray-700/50 rounded w-1/3"></div>
+                    </div>
+                  ))}
+                </div>
+              ) : awards && awards.length > 0 ? (
+                <motion.div
+                  variants={containerVariants}
+                  initial="hidden"
+                  animate="visible"
+                  className="relative border-l-2 border-gray-700 pl-6"
+                >
+                  {awards.map((award) => (
+                    <AwardCard key={award.id} {...award} />
+                  ))}
+                </motion.div>
+              ) : (
+                <p className="text-gray-500 pl-2">
+                  Awards information is currently unavailable. Please try again
+                  later.
+                </p>
+              )}
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </ErrorBoundary>
   );
 };
 

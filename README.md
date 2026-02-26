@@ -24,17 +24,48 @@ Run the development server:
 npm run dev
 ```
 
+### Database Backup & Restore
+
+The project includes integrated database backup and restore utilities:
+
+**Export (Backup):**
+
+```bash
+npm run db:export
+```
+
+**Import (Restore):**
+
+```bash
+npm run db:import
+```
+
+**Features:**
+
+- Complete database schema in `scripts/database/schema.sql`
+- Automated data export/import scripts
+- Supports JSON and SQL formats
+- Batch processing for large datasets
+
+For detailed documentation, see [scripts/database/README.md](scripts/database/README.md)
+
 ### Future Additions:
 
-- [x] Combine all supabase queries into a single request for efficiency
-- [] Dark Mode
-- [] Smooth scrolling
-- [] Lazy loading with error boundaries
-- [] Loading skeletons
-- [] Touch-friendly interactive elements on mobile
-- [] RAG-based ChatBot
-- [] Auto-detect language & show text accordingly
-- [] Use Prima/Redis for cache
-- [] Check rate limiter
-- [] Add the cite this functionality to publications generating citations in various formats (APA, Hardward, IEEE, etc)
-- [] Decrease the usage of Client components & increase Server components
+- [ ] Add accessibility
+  - [ ] Language switcher
+  - [ ] Reduced motion support — respect prefers-reduced-motion in GSAP/Framer Motion
+  - [ ] High contrast mode — toggle stored in localStorage
+- [ ] Add more features or functionalities
+  - [ ] Accent selection from a centralised source
+  - [ ] Cursor trail effect — you have CustomCursor.jsx, extend it with a particle trail
+  - [ ] "Contact form" using nodemailer api
+  - [ ] "View counter"
+  - [ ] Print-friendly CV page - /cv route that renders a clean printable version via @media print
+  - [ ] Admin dashboard - protected /admin route (NextAuth) to edit DB entries without SQL
+  - [ ] Blog/Articles section - MDX-based or DB-backed, with tags, search, RSS feed
+  - [ ] Email newsletter - "Subscribe for updates" using Resend audiences
+
+- [ ] Auto-detect language & show text accordingly
+- [ ] Touch-friendly interactive elements on mobile
+- [ ] RAG-based ChatBot
+- [ ] Use Prima/Redis for cache

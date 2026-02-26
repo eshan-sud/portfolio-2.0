@@ -1,5 +1,7 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+*-deprecated*
+
 # dependencies
 /node_modules/
 */node_modules/
@@ -28,6 +30,12 @@
 public/queries.sql
 file-structure.txt
 
+# Database backup exports (contains sensitive data)
+scripts/database/data/
+
+# But allow sample data for local development (optional)
+# If you want to version control your local data, comment out the line above
+
 # debug
 npm-debug.log*
 yarn-debug.log*
@@ -37,6 +45,8 @@ yarn-error.log*
 # env files
 .env*
 */.env*
+# But keep .env.example files if you have them
+!.env.example
 
 # vercel
 .vercel

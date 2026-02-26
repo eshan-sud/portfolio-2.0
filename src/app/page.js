@@ -4,9 +4,13 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowRight, Download } from "lucide-react";
+import {
+  ArrowRight,
+  // Download
+} from "lucide-react";
 import { useData } from "@/lib/DataContext";
-import MaintenancePage from "@/components/MaintenancePage";
+import { MaintenancePage, ErrorBoundary } from "@/components";
+import { accent } from "@/lib/accent";
 
 const HomePage = () => {
   const { resumeUrl } = useData();
@@ -71,14 +75,14 @@ const HomePage = () => {
               href={resumeUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="group inline-flex items-center gap-2 px-4 py-3 bg-gray-800/50 text-yellow-400 rounded-full font-semibold border border-gray-700/50 hover:bg-yellow-400 hover:text-black transition-all duration-300"
+              className={`group inline-flex items-center gap-2 px-4 py-3 bg-gray-800/50 ${accent.text} rounded-full font-semibold border border-gray-700/50 ${accent.hoverBg} hover:text-black transition-all duration-300`}
             >
-              <span>View My Resume</span>
+              <span>{"View My Resume"}</span>
               <ArrowRight className="transition-transform duration-300 group-hover:translate-x-1" />
             </Link>
             {/* <button
               onClick={handleDownload}
-              className="group inline-flex items-center justify-center p-3 w-12 h-12 bg-gray-800/50 text-yellow-400 rounded-full font-semibold border border-gray-700/50 hover:bg-yellow-400 hover:text-black transition-all duration-300"
+              className={`group inline-flex items-center justify-center p-3 w-12 h-12 bg-gray-800/50 ${accent.text} rounded-full font-semibold border border-gray-700/50 ${accent.hoverBg} hover:text-black transition-all duration-300`}
             >
               <Download className="h-8 w-8 group-hover:scale-110 transition-all duration-300" />
             </button> */}
@@ -94,5 +98,9 @@ export default function App() {
   if (isMaintenanceMode) {
     return <MaintenancePage />;
   }
-  return <HomePage />;
+  return (
+    <ErrorBoundary fallbackMessage="Unable to load page data. Please refresh.">
+      <HomePage />
+    </ErrorBoundary>
+  );
 }

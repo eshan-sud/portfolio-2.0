@@ -1,9 +1,0 @@
-// project/jsconfig
-
-{
-  "compilerOptions": {
-    "paths": {
-      "@/*": ["./src/*"]
-    }
-  }
-}

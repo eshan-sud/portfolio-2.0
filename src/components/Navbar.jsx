@@ -18,6 +18,7 @@ const NavLink = ({ href, children, onClick }) => {
     <Link
       href={href}
       onClick={onClick}
+      aria-current={isActive ? "page" : undefined}
       className={`relative text-gray-500 hover:text-black transition-colors group ${
         isActive ? "text-black font-semibold" : ""
       }`}
@@ -59,7 +60,10 @@ const Navbar = () => {
 
   return (
     <header className="flex justify-center p-4 md:p-6 w-full">
-      <nav className="bg-white text-black w-full max-w-4xl flex items-center justify-between p-2 px-6 rounded-full shadow-sm transform scale-100 xl:scale-120 2xl:scale-170 2xl:m-50 2xl:text-xl transition-transform duration-500 ease-in-out">
+      <nav
+        aria-label="Site navigation"
+        className="bg-white text-black w-full max-w-4xl flex items-center justify-between p-2 px-6 rounded-full shadow-sm transform scale-100 xl:scale-120 2xl:scale-170 2xl:m-50 2xl:text-xl transition-transform duration-500 ease-in-out"
+      >
         <div>
           <Link
             href="/"
@@ -84,15 +88,24 @@ const Navbar = () => {
         <div className="md:hidden">
           <button
             onClick={toggleMenu}
+            aria-label={
+              isMenuOpen ? "Close navigation menu" : "Open navigation menu"
+            }
+            aria-expanded={isMenuOpen}
+            aria-controls="mobile-menu"
             className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors"
           >
-            <Menu size={24} />
+            <Menu size={24} aria-hidden="true" />
           </button>
         </div>
       </nav>
       <AnimatePresence>
         {isMenuOpen && (
           <motion.div
+            id="mobile-menu"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Navigation menu"
             variants={menuVariants}
             initial="hidden"
             animate="visible"
@@ -118,9 +131,10 @@ const Navbar = () => {
             </div>
             <button
               onClick={closeMenu}
+              aria-label="Close navigation menu"
               className="absolute top-8 right-8 w-12 h-12 flex items-center justify-center rounded-full bg-gray-200 hover:bg-gray-300 transition-colors"
             >
-              <X size={28} />
+              <X size={28} aria-hidden="true" />
             </button>
           </motion.div>
         )}

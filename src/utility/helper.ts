@@ -2,7 +2,6 @@
 
 import {
   Github,
-  Twitter,
   Linkedin,
   Instagram,
   Code,
@@ -13,7 +12,6 @@ import {
 // --- Map social media names to icons ---
 const iconMap = {
   GitHub: Github,
-  Twitter: Twitter,
   LinkedIn: Linkedin,
   Instagram: Instagram,
   LeetCode: Code,
