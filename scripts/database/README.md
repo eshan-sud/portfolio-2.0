@@ -85,7 +85,7 @@ The `schema.sql` file contains the complete database structure:
 The scripts use environment variables from your project's `.env` file:
 
 - `NEXT_PUBLIC_SUPABASE_URL` - Supabase project URL
-- `SUPABASE_ANON_KEY` - Anon key (for export)
+- `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` - Anon key (for export)
 - `SUPABASE_SERVICE_ROLE_KEY` - Service role key (for import)
 
 ## 📝 Manual Restoration
