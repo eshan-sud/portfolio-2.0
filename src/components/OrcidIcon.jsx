@@ -1,4 +1,4 @@
-// project/src/components/OrcidIcon.jsx
+// src/components/OrcidIcon.jsx
 
 import Image from "next/image";
 

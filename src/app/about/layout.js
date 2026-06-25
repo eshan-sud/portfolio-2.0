@@ -1,9 +1,9 @@
 // src/app/about/layout.js
 
 import BreadcrumbJsonLd from "@/components/BreadcrumbJsonLd";
-import { CLOUDINARY_CLOUD_NAME } from "@/lib/constants";
+import { CLOUDINARY_BASE_URL } from "@/lib/constants";
 
-const OG_IMAGE = `${CLOUDINARY_CLOUD_NAME}/v1755773898/portfolio2.0_myyptt.png`;
+const OG_IMAGE = `${CLOUDINARY_BASE_URL}v1755773898/portfolio2.0_myyptt.png`;
 
 export const metadata = {
   title: "About",

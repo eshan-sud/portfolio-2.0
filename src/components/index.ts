@@ -2,23 +2,23 @@
 // Barrel exports for all components, grouped by role.
 // Usage: import { Navbar, Footer, ErrorBoundary } from "@/components"
 
-// ── Layout ────────────────────────────────────────────
+// Layout
 export { default as ClientLayout } from "./ClientLayout";
 export { default as Navbar } from "./Navbar";
 export { default as Footer } from "./Footer";
 
-// ── Visual Effects / Backgrounds ─────────────────────
+// Visual Effects / Backgrounds
 export { default as AuroraBackground } from "./AuroraBackground";
 export { default as StarryBackground } from "./StarryBackground";
 
-// ── UI Primitives ─────────────────────────────────────
+// UI Primitives
 export { FloatingRoundButton, ThemeSwitcher } from "./Buttons";
 export { default as CustomCursor } from "./CustomCursor";
 export { default as ErrorBoundary } from "./ErrorBoundary";
 export { default as Loader } from "./Loader";
 export { LoaderSVGs, SVGLetter } from "./LoaderSVGs";
 
-// ── Skeleton Loaders ──────────────────────────────────
+// Skeleton Loaders
 export {
   CardSkeleton,
   ProjectCardSkeleton,
@@ -32,28 +32,29 @@ export {
   ShimmerSkeleton,
 } from "./Skeletons";
 
-// ── Modals ────────────────────────────────────────────
+// Modals
 export { default as CitationModal } from "./CitationModal";
 
-// ── Icons ─────────────────────────────────────────────
+// Icons
 export { default as OrcidIcon } from "./OrcidIcon";
 
-// ── Full Pages ────────────────────────────────────────
+// Full Pages
 export { default as MaintenancePage } from "./MaintenancePage";
 
-// ── SEO / Structured Data ────────────────────────────
+// SEO / Structured Data
 export { default as StructuredData } from "./StructuredData";
 export { default as BreadcrumbJsonLd } from "./BreadcrumbJsonLd";
 
-// ── Internationalisation ──────────────────────────────
+// Internationalisation
 export { default as FloatingLanguageSelector } from "./FloatingLanguageSelector";
 
-// ── Navigation & Transitions ──────────────────────────
+// Navigation & Transitions
 export { default as PageTransition } from "./PageTransition";
 export { default as BackToTopButton } from "./BackToTopButton";
+export { default as PullToRefresh } from "./PullToRefresh";
 
-// ── Data Visualisation ───────────────────────────────
+// Data Visualisation
 export { default as GitHubActivityGraph } from "./GitHubActivityGraph";
 
-// ── Developer Tools (dev-only) ───────────────────────
+// Developer Tools (dev-only)
 export { default as DevTools } from "./DevTools";

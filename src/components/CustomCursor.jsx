@@ -1,4 +1,4 @@
-// project/src/components/CustomCursor.jsx
+// src/components/CustomCursor.jsx
 
 "use client";
 

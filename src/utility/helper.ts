@@ -1,4 +1,4 @@
-// project/src/utility/helper.js
+// src/utility/helper.js
 
 import {
   Github,

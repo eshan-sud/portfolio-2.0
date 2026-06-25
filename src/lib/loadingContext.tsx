@@ -1,4 +1,4 @@
-// project/src/lib/LoadingContext.js
+// src/lib/LoadingContext.js
 
 "use client";
 

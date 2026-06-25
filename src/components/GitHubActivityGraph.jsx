@@ -2,7 +2,8 @@
 
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import { createPortal } from "react-dom";
 import { motion } from "framer-motion";
 import { Github } from "lucide-react";
 import { accent } from "@/lib/accent";
@@ -36,6 +37,36 @@ const LEVEL_CLASSES = [
   accent.level3, // 7–9
   accent.level4, // 10+
 ];
+
+// localStorage cache config
+const GH_CACHE_KEY = "github_activity_cache";
+const GH_CACHE_TTL = 1000 * 60 * 60; // 1 hour
+
+function getCachedActivity() {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = localStorage.getItem(GH_CACHE_KEY);
+    if (!raw) return null;
+    const { timestamp, data } = JSON.parse(raw);
+    if (Date.now() - timestamp > GH_CACHE_TTL) {
+      localStorage.removeItem(GH_CACHE_KEY);
+      return null;
+    }
+    return { data, timestamp };
+  } catch {
+    return null;
+  }
+}
+
+function setCachedActivity(data) {
+  if (typeof window === "undefined") return;
+  try {
+    localStorage.setItem(
+      GH_CACHE_KEY,
+      JSON.stringify({ timestamp: Date.now(), data }),
+    );
+  } catch {}
+}
 
 function getLevel(count) {
   if (count === 0) return 0;
@@ -94,19 +125,99 @@ function buildMonthSpans(weeks) {
   return spans;
 }
 
+/** Tooltip rendered via portal so it's never clipped by overflow-x-auto */
+const TooltipPortal = ({ tooltip }) => {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  if (!mounted || !tooltip) return null;
+
+  // Clamp tooltip x so it never overflows the viewport
+  const tooltipWidth = 220;
+  const clampedX = Math.min(
+    Math.max(tooltip.x, tooltipWidth / 2 + 8),
+    window.innerWidth - tooltipWidth / 2 - 8,
+  );
+
+  return createPortal(
+    <div
+      className="fixed z-[9999] pointer-events-none"
+      style={{
+        left: clampedX,
+        top: tooltip.y - 8,
+        transform: "translate(-50%, -100%)",
+      }}
+    >
+      <div className="bg-gray-900 border border-gray-700 text-white text-xs rounded-lg px-3 py-2 shadow-xl whitespace-nowrap">
+        <span className={`font-semibold ${accent.text}`}>
+          {tooltip.count} contribution{tooltip.count !== 1 ? "s" : ""}
+        </span>
+        <span className="text-gray-400">
+          {" "}
+          on{" "}
+          {new Date(tooltip.date + "T00:00:00").toLocaleDateString("en-US", {
+            weekday: "short",
+            month: "short",
+            day: "numeric",
+            year: "numeric",
+          })}
+        </span>
+      </div>
+    </div>,
+    document.body,
+  );
+};
+
 const GitHubActivityGraph = () => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [tooltip, setTooltip] = useState(null);
+  const expireTimerRef = useRef(null);
 
   useEffect(() => {
-    fetch("/api/github-activity")
-      .then((r) => r.json())
-      .then((d) => {
-        if (!d.error) setData(d);
-      })
-      .catch(() => {})
-      .finally(() => setLoading(false));
+    let cancelled = false;
+
+    const fetchActivity = async () => {
+      // Check localStorage cache first
+      const cached = getCachedActivity();
+      if (cached) {
+        if (!cancelled) {
+          setData(cached.data);
+          setLoading(false);
+        }
+        // Schedule auto-refresh for the remaining TTL
+        const remaining = GH_CACHE_TTL - (Date.now() - cached.timestamp);
+        expireTimerRef.current = setTimeout(
+          () => {
+            if (!cancelled) fetchActivity();
+          },
+          Math.max(remaining, 0),
+        );
+        return;
+      }
+
+      try {
+        const r = await fetch("/api/github-activity");
+        const d = await r.json();
+        if (!cancelled && !d.error) {
+          setCachedActivity(d);
+          setData(d);
+          // Schedule refresh after full TTL
+          expireTimerRef.current = setTimeout(() => {
+            if (!cancelled) fetchActivity();
+          }, GH_CACHE_TTL);
+        }
+      } catch {
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    };
+
+    fetchActivity();
+
+    return () => {
+      cancelled = true;
+      if (expireTimerRef.current) clearTimeout(expireTimerRef.current);
+    };
   }, []);
 
   if (loading) {
@@ -251,37 +362,8 @@ const GitHubActivityGraph = () => {
           </div>
         </div>
       </div>
-
-      {/* Tooltip */}
-      {tooltip && (
-        <div
-          className="fixed z-50 pointer-events-none"
-          style={{
-            left: tooltip.x,
-            top: tooltip.y - 8,
-            transform: "translate(-50%, -100%)",
-          }}
-        >
-          <div className="bg-gray-900 border border-gray-700 text-white text-xs rounded-lg px-3 py-2 shadow-xl whitespace-nowrap">
-            <span className={`font-semibold ${accent.text}`}>
-              {tooltip.count} contribution{tooltip.count !== 1 ? "s" : ""}
-            </span>
-            <span className="text-gray-400">
-              {" "}
-              on{" "}
-              {new Date(tooltip.date + "T00:00:00").toLocaleDateString(
-                "en-US",
-                {
-                  weekday: "short",
-                  month: "short",
-                  day: "numeric",
-                  year: "numeric",
-                },
-              )}
-            </span>
-          </div>
-        </div>
-      )}
+      {/* Tooltip via portal — never clipped by overflow-x-auto */}
+      <TooltipPortal tooltip={tooltip} />
     </motion.div>
   );
 };

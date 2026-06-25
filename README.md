@@ -1,4 +1,4 @@
-## Portfolio 2.0
+# Portfolio 2.0
 
 An enhanced-dynamic & responsive portfolio website, designed to effectively showcase my skills, projects, & resume to potential employers & peers, enhancing visibility & professional branding.
 
@@ -6,7 +6,7 @@ An enhanced-dynamic & responsive portfolio website, designed to effectively show
 
 Deployed link: <a href="https://eshan-sud.vercel.app/" target="_blank"> here </a>
 
-Tech stack:
+### Tech stack:
 
 - Next.js
 - Tailwind CSS
@@ -14,11 +14,11 @@ Tech stack:
 - Framer Motion
 - Supabase / PostgreSQL
 - Cloudinary
-- Vercel
+- Vercel Hosting
 
 ---
 
-Run the development server:
+### Run the Development Server:
 
 ```bash
 npm run dev
@@ -51,17 +51,16 @@ For detailed documentation, see [scripts/database/README.md](scripts/database/RE
 
 ### Future Additions:
 
-- [ ] FIX: GitHubActivityGraph hover functionality
-- [ ] FIX: Cite this blur effect
 - [ ] FIX: Project sample pictures
 - [ ] Add accessibility
   - [ ] Language switcher
   - [ ] Auto-detect language
   - [ ] Reduced motion support — respect prefers-reduced-motion in GSAP/Framer Motion
   - [ ] High contrast mode — toggle stored in localStorage
+  - [ ] Screen reader functionality
 - [ ] Add more features or functionalities
-  - [ ] Cursor trail effect — you have CustomCursor.jsx, extend it with a particle trail
-  - [ ] "Contact form" using nodemailer api
+  - [ ] Cursor trail effect — Extend `CustomCursor.jsx` with a particle trail
+  - [ ] "Contact form" using Nodemailer API
   - [ ] "View counter"
   - [ ] Print-friendly CV page - /cv route that renders a clean printable version via @media print
   - [ ] Admin dashboard - protected /admin route (NextAuth) to edit DB entries without SQL

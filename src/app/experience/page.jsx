@@ -1,4 +1,4 @@
-// project/src/app/experience/page.jsx
+// src/app/experience/page.jsx
 
 "use client";
 
@@ -236,7 +236,7 @@ const ExperiencePage = () => {
                 <span className="text-gray-500">My Journey</span> So Far.
               </span>
             </h1>
-            <p className="text-base md:text-lg text-gray-400 max-w-2xl mb-16">
+            <p className="text-base md:text-lg text-gray-400 max-w-2xl mb-16 text-justify">
               A timeline of my professional growth, internships, and full-time
               roles where I've had the opportunity to learn and contribute.
             </p>

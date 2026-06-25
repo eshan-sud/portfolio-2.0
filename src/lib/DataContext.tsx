@@ -93,18 +93,24 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   useEffect(() => {
-    const fetchAllData = async () => {
+    let isMounted = true;
+    const fetchAllData = async (isBackgroundRefetch = false) => {
       try {
         const cached = getCachedEntry();
         if (cached) {
-          setData((prev) => ({ ...prev, ...cached.data }));
-          setIsLoading(false);
+          if (isMounted) {
+            setData((prev) => ({ ...prev, ...cached.data }));
+            setIsLoading(false);
+          }
           // Schedule expiry for the remaining TTL so a long-lived tab refetches on time
           const remaining = CACHE_DURATION - (Date.now() - cached.timestamp);
-          scheduleExpiry(remaining, fetchAllData);
+          scheduleExpiry(remaining, () => fetchAllData(true));
           return;
         }
-        // const startTime = performance.now();
+        // Only show loading spinner on the initial load, not background refreshes
+        if (!isBackgroundRefetch && isMounted) {
+          setIsLoading(true);
+        }
         let projectsRes,
           experiencesRes,
           educationRes,
@@ -113,7 +119,6 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
           awardsRes,
           techStackRes,
           userDataRes;
-
         if (!USE_LOCAL_DATA) {
           try {
             const { data: rpcData, error: rpcError } = await supabase.rpc(
@@ -254,22 +259,27 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
           openToWork: userDataRes?.open_to_work ?? false,
           error: null,
         };
-        setCachedData(fetchedData);
-        setData((prev) => ({ ...prev, ...fetchedData }));
-        // For development
-        // if (process.env.NODE_ENV === "development") {
-        //   const duration = ((performance.now() - startTime) / 1000).toFixed(2);
-        //   console.info(`[DataContext] Fetched fresh data in ${duration}s`);
-        // }
-        scheduleExpiry(CACHE_DURATION, fetchAllData);
+
+        if (isMounted) {
+          setCachedData(fetchedData);
+          setData((prev) => ({ ...prev, ...fetchedData }));
+          // For development
+          // if (process.env.NODE_ENV === "development") {
+          //   const duration = ((performance.now() - startTime) / 1000).toFixed(2);
+          //   console.info(`[DataContext] Fetched fresh data in ${duration}s`);
+          // }
+          scheduleExpiry(CACHE_DURATION, () => fetchAllData(true));
+        }
       } catch (error) {
-        setData((prev) => ({ ...prev, error }));
+        if (isMounted) setData((prev) => ({ ...prev, error }));
       } finally {
-        setIsLoading(false);
+        if (isMounted) setIsLoading(false);
       }
     };
+
     fetchAllData();
     return () => {
+      isMounted = false;
       if (expireTimerRef.current) clearTimeout(expireTimerRef.current);
     };
   }, [scheduleExpiry]);

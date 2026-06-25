@@ -1,4 +1,4 @@
-// project/src/app/sitemap.js
+// src/app/sitemap.js
 
 export default function sitemap() {
   const baseUrl = "https://eshan-sud.vercel.app";

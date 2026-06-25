@@ -1,4 +1,4 @@
-// project/src/utility/animation.js
+// src/utility/animation.js
 
 const containerVariants = {
   hidden: {},

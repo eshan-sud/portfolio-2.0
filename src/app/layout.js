@@ -1,10 +1,10 @@
-// project/src/app/layout.js
+// src/app/layout.js
 
 import { Geist, Geist_Mono } from "next/font/google";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 
-import { CLOUDINARY_CLOUD_NAME } from "@/lib/constants";
+import { CLOUDINARY_BASE_URL } from "@/lib/constants";
 import { ThemeProvider } from "@/lib/ThemeProvider";
 import { DataProvider } from "@/lib/DataContext";
 import {
@@ -81,7 +81,7 @@ export const metadata = {
       { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
     ],
   },
-  manifest: "/manifest.json",
+  // manifest is auto-injected by src/app/manifest.js (Next.js special file)
   robots: {
     index: true,
     follow: true,
@@ -121,7 +121,7 @@ export const metadata = {
       "Explore Eshan Sud's portfolio featuring cutting-edge projects in AI/ML, full-stack development, research publications in IEEE Access, and professional experience.",
     images: [
       {
-        url: `${CLOUDINARY_CLOUD_NAME}/v1755773898/portfolio2.0_myyptt.png`,
+        url: `${CLOUDINARY_BASE_URL}v1755773898/portfolio2.0_myyptt.png`,
         width: 1200,
         height: 630,
         alt: "Eshan Sud Portfolio",

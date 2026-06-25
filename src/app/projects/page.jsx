@@ -30,7 +30,9 @@ const ProjectCard = ({ project, onClick, isPriority = false }) => {
       variants={cardVariants}
       className="bg-[#16224c] rounded-lg overflow-hidden group relative border border-gray-700/50 cursor-pointer"
     >
-      <div className={`absolute inset-0 ${accent.bgMuted} opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-sm`}></div>
+      <div
+        className={`absolute inset-0 ${accent.bgMuted} opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-sm`}
+      ></div>
       <div className="relative z-10">
         {/* Project Picture */}
         <div className="relative w-full h-40 overflow-hidden bg-gray-900">
@@ -55,7 +57,9 @@ const ProjectCard = ({ project, onClick, isPriority = false }) => {
           </p>
           {/* Learn More Button */}
           <div className="flex items-center gap-4">
-            <span className={`inline-flex items-center gap-1 text-xs ${accent.text}`}>
+            <span
+              className={`inline-flex items-center gap-1 text-xs ${accent.text}`}
+            >
               <ExternalLink size={14} /> Learn More
             </span>
           </div>
@@ -131,13 +135,13 @@ const ProjectModal = ({ project, onClose }) => {
             {project.title}
           </h2>
           {/* Project Description */}
-          <p className="text-gray-300 mb-6 text-sm md:text-base">
+          <p className="text-gray-300 mb-6 text-sm md:text-base text-justify">
             {project.description}
           </p>
           {/* Extended content/case study */}
           {project.content && (
             <div className="prose prose-invert max-w-none mb-6">
-              <p className="text-gray-400 text-sm leading-relaxed whitespace-pre-line">
+              <p className="text-gray-400 text-sm leading-relaxed whitespace-pre-line text-justify">
                 {project.content}
               </p>
             </div>
@@ -239,9 +243,11 @@ const ProjectsPage = () => {
             className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 flex items-center gap-3"
           >
             <Layers size={36} className="text-white" />
-            <span><span className="text-gray-500">My Creative</span> Projects.</span>
+            <span>
+              <span className="text-gray-500">My Creative</span> Projects.
+            </span>
           </motion.h1>
-          <p className="text-base md:text-lg text-gray-400 mb-12">
+          <p className="text-base md:text-lg text-gray-400 mb-12 text-justify">
             A collection of my work, from web apps to AI experiments.
           </p>
           <div className="relative mb-12">

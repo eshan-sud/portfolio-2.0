@@ -49,15 +49,12 @@
 
 html,
 body {
-  /* overflow: hidden; */
-  /* overflow: auto; */
+  height: 100%;
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
 }
 
-* {
-  /* cursor: none; */
-}
+/* * { cursor: none; } */
 
 .custom-cursor {
   position: fixed;

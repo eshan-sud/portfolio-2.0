@@ -1,4 +1,4 @@
-// project/src/components/Footer.jsx
+// src/components/Footer.jsx
 
 "use client";
 

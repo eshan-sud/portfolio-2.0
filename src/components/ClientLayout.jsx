@@ -4,16 +4,16 @@
 
 // import { useTheme } from "next-themes";
 import { motion, AnimatePresence } from "framer-motion";
-
-import { useData } from "@/lib/DataContext";
 // import CustomCursor from "@/components/CustomCursor";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import Loader from "@/components/Loader";
 import DevTools from "@/components/DevTools";
-import PageTransition from "@/components/PageTransition";
+import Footer from "@/components/Footer";
+import Navbar from "@/components/Navbar";
+import Loader from "@/components/Loader";
 import BackToTopButton from "@/components/BackToTopButton";
 // import FloatingLanguageSelector from "@/components/FloatingLanguageSelector";
+import PageTransition from "@/components/PageTransition";
+import PullToRefresh from "@/components/PullToRefresh";
+import { useData } from "@/lib/DataContext";
 
 export default function ClientLayout({ children }) {
   // const { theme, setTheme } = useTheme();
@@ -40,6 +40,7 @@ export default function ClientLayout({ children }) {
           </AnimatePresence>
         </main>
         <Footer />
+        <PullToRefresh />
         <BackToTopButton />
         <DevTools />
         {/* <FloatingLanguageSelector /> */}

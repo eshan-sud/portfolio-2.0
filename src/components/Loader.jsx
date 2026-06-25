@@ -1,4 +1,4 @@
-// project/src/components/Loader.jsx
+// src/components/Loader.jsx
 
 "use client";
 

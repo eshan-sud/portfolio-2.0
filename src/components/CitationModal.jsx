@@ -2,7 +2,8 @@
 
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Copy, Check } from "lucide-react";
 import { accent } from "@/lib/accent";
@@ -148,6 +149,9 @@ ${bibVolume}${bibIssue}${bibPages}${bibKeywords}${bibDOI}}`;
 const CitationModal = ({ publication, onClose }) => {
   const [selectedFormat, setSelectedFormat] = useState("APA");
   const [copied, setCopied] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => setMounted(true), []);
 
   const formats = [
     "Plaintext",
@@ -170,8 +174,10 @@ const CitationModal = ({ publication, onClose }) => {
     }
   };
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+  if (!mounted) return null;
+
+  return createPortal(
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -247,7 +253,8 @@ const CitationModal = ({ publication, onClose }) => {
           </button>
         </div>
       </motion.div>
-    </div>
+    </div>,
+    document.body,
   );
 };
 

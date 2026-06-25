@@ -1,4 +1,4 @@
-// project/src/lib/ThemeProvider.js
+// src/lib/ThemeProvider.js
 
 "use client";
 

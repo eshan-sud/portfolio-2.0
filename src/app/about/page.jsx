@@ -1,4 +1,4 @@
-// project/src/app/about/page.jsx
+// src/app/about/page.jsx
 
 "use client";
 
@@ -447,7 +447,7 @@ const AboutPage = () => {
               className="text-center md:text-left"
             >
               {/* Description */}
-              <p className="text-base sm:text-lg md:text-xl mb-10 leading-relaxed text-justify">
+              <p className="text-base sm:text-lg md:text-xl mb-10 leading-relaxed text-justify italic">
                 {description}
               </p>
               {/* Socials */}
@@ -500,7 +500,7 @@ const AboutPage = () => {
           ) : (
             <TechStackSection techStack={techStack} />
           )}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 mt-24">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 mt-24 pb-8">
             {/* Education Section */}
             <div>
               <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-12 flex items-center gap-3">

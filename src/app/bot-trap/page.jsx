@@ -1,4 +1,4 @@
-// project/src/app/bot-trap/page.jsx
+// src/app/bot-trap/page.jsx
 
 // This page is a honeypot for bad bots.
 // Good bots will not crawl this page because of robots.txt.

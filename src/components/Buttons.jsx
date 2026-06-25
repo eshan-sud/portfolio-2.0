@@ -1,4 +1,4 @@
-// project/src/components/Buttons.jsx
+// src/components/Buttons.jsx
 
 const FloatingRoundButton = () => {
   return (

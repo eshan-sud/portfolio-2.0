@@ -11,6 +11,8 @@ import {
   Lightbulb,
   Quote,
   FlaskConical,
+  ChevronRight,
+  ChevronDown,
 } from "lucide-react";
 import { useData } from "@/lib/DataContext";
 import { formatDate, titleCase } from "@/utility/helper";
@@ -60,11 +62,11 @@ const ResearchCard = ({
       ></div>
       <div className="relative z-10">
         <div className="flex justify-between items-start gap-4 mb-2">
-          <h3 className="text-xl font-bold text-white">{title}</h3>
+          <h3 className="text-xl font-bold text-white text-justify">{title}</h3>
           <div className="flex-shrink-0 flex gap-2">
             <span
               className={`text-xs font-medium px-2.5 py-1 rounded-full ${
-                status === "published" || status === "granted"
+                status == "published" || status === "granted"
                   ? "bg-green-500/20 text-green-400"
                   : status === "accepted"
                     ? "bg-blue-500/20 text-blue-400"
@@ -84,7 +86,7 @@ const ResearchCard = ({
         </div>
         <p className="text-md font-semibold text-gray-300 mb-1">{subtitle}</p>
         <p className="text-sm text-gray-400 mb-4">{date}</p>
-        <p className="text-gray-400 text-sm mb-4">{authors}</p>
+        <p className="text-gray-400 text-sm mb-4 text-justify">{authors}</p>
         {/* Tags/Keywords */}
         {tags && tags.length > 0 && (
           <div className="flex flex-wrap gap-2 mb-4">
@@ -105,8 +107,15 @@ const ResearchCard = ({
               onClick={() => setShowAbstract(!showAbstract)}
               className={`text-sm ${accent.text} ${accent.textHover} transition-colors flex items-center gap-1`}
             >
-              {showAbstract ? "▼" : "▶"} {showAbstract ? "Hide" : "View"}
-              Abstract
+              {showAbstract ? (
+                <>
+                  <ChevronDown size={16} /> Hide Abstract
+                </>
+              ) : (
+                <>
+                  <ChevronRight size={16} /> View Abstract
+                </>
+              )}
             </button>
             {showAbstract && (
               <p className="mt-2 text-sm text-gray-400 leading-relaxed text-justify">
@@ -176,7 +185,9 @@ const ResearchSection = ({ title, icon, items, orcidUrl, formatDate }) => (
       >
         <OrcidIcon size={16} />
         <span>View my ORCiD Profile</span>
-        <span className={`absolute left-0 -bottom-1 w-full h-[1px] ${accent.bg} transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300`}></span>
+        <span
+          className={`absolute left-0 -bottom-1 w-full h-[1px] ${accent.bg} transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300`}
+        ></span>
       </Link>
     )}
     <motion.div
@@ -227,7 +238,7 @@ const ResearchPage = () => {
               <span className="text-gray-500">From Theory</span> to Practice.
             </span>
           </motion.h1>
-          <p className="text-base md:text-lg text-gray-400 mb-12">
+          <p className="text-base md:text-lg text-gray-400 mb-12 text-justify">
             A collection of my academic publications & intellectual property
             contributions, exploring the frontiers of technology.
           </p>

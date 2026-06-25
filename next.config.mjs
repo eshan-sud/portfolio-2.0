@@ -1,4 +1,4 @@
-// project/next.config.mjs
+// next.config.mjs
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
